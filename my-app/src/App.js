@@ -1,56 +1,49 @@
-import {useState} from 'react';
-// import Button from '@mui/material/Button';
-// import ButtonGroup from '@mui/material/ButtonGroup';
-// import Container from '@mui/material/Container';
+import {useState, useEffect} from 'react';
 
 function App() {
-  const [todo, setTodo] = useState("");
-  const [todos, setTodos] = useState([]);
-  const onChange = (event) => setTodo(event.target.value);
-  const onSubmit = (event) => {
-    event.preventDefault();
-    
-    if(todo === ""){
-      return;
-    }
+  const [loading, setLoading] = useState(true);
+  const [coins, setCoins] = useState([]);
+  const [coinPrice, setCoinPrice] = useState(0);
+  const [price, setPrice] = useState(0);
+  let [changePrice, setChangePrice] = useState(0);
 
-    setTodo("");
-    setTodos((currentArray) => [todo, ...currentArray]);
-    
+  let onChange = (event) => {
+    setCoinPrice(event.target.value);
+    priceInverter();
   };
 
-  //console.log(todos);
-
-  const onClick = () => {
-
+  let priceChange = (event) =>{
+    setPrice(event.target.value);
+    priceInverter();
   };
 
-  
-  
+  useEffect(() => {
+    fetch("https://api.coinpaprika.com/v1/tickers")
+    .then((response) => response.json())
+    .then((json) => {
+      setCoins(json);
+      setLoading(false);
+    });
+  }, []);
+
+  let priceInverter = () => {
+    console.log(price, coinPrice);
+    setChangePrice(price / coinPrice);
+  };
+
+  //console.log(changePrice);
+
   return (
-    // <Container fixed>
-    //   <ButtonGroup variant="contained" aria-label="outlined primary button group">
-    //     <Button>TEXT</Button>
-    //     <Button>TEXT</Button>
-    //   </ButtonGroup>
-    // </Container>
     <div>
-      <h1>My To Dos ({todos.length})</h1>
-      <form onSubmit={onSubmit}>
-        <input 
-          type="text" 
-          placeholder="TODOLIST"
-          onChange={onChange}
-          value={todo}
-        />
-        <button onClick={onClick}>Add To Do</button>
-      </form>
-      <hr />
-      <ul>
-        {todos.map((item, index) => (
-          <li key={index}>{item}</li>
+      <h1>The Coins!</h1>  
+      {loading ? <strong>Loading...</strong> : null}
+      <select onChange={onChange}>
+        {coins.map((item) => (
+          <option key={item.id} value={item.quotes.USD.price}>{item.name} {item.symbol} : {item.quotes.USD.price} USD</option>
         ))}
-      </ul>
+      </select>
+      <input type="text" onChange={priceChange} value={price}/>
+      <span>{changePrice.toFixed(8)}</span>
     </div>
   );
 }
