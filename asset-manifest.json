@@ -1,0 +1,12 @@
+{
+  "files": {
+    "main.js": "/realize-web/static/js/main.bb5c8b59.js",
+    "static/js/787.28cb0dcd.chunk.js": "/realize-web/static/js/787.28cb0dcd.chunk.js",
+    "index.html": "/realize-web/index.html",
+    "main.bb5c8b59.js.map": "/realize-web/static/js/main.bb5c8b59.js.map",
+    "787.28cb0dcd.chunk.js.map": "/realize-web/static/js/787.28cb0dcd.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.bb5c8b59.js"
+  ]
+}
